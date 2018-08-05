@@ -1,6 +1,6 @@
-INFILE=/mnt/ramdisk/origth2.txt
+INFILE=/mnt/ramdisk/wiki-mini.txt
 OUTFILE=/mnt/ramdisk/outfileth.txt
-WORDFILE=/mnt/ramdisk/freqword.txt
+WORDFILE=/mnt/ramdisk/wordlist123k.txt
 #wordfile must be ordered longest to shortest
 counter=0
 echo word"|"count > $OUTFILE
@@ -20,7 +20,13 @@ while read -r line; do
 		#mv $INFILE.bak $INFILE
 		#sed -i -e "s/-*${line2}-*/-/g" $INFILE
 	fi
-	#((counter++))
+	((counter++))
+	#if (( counter % 10 == 0 ))
+	#then
+	#	gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.bak
+	#	mv $INFILE.bak $INFILE
+	#fi
+
 	#if (( counter >= 15)); then
 	#	break
 	#fi
