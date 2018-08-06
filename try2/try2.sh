@@ -1,7 +1,11 @@
-INFILE=/mnt/ramdisk/wiki-orig.txt
+INFILE=/mnt/ramdisk/wiki-mini.txt
+#INFILE=/mnt/ramdisk/wiki-orig.txt
 OUTFILE=/mnt/ramdisk/outfileth.txt
 WORDFILE=/mnt/ramdisk/wordlist123k.txt
+LOGFILE=/mnt/ramdisk/logfile.txt
+
 #wordfile must be ordered longest to shortest
+echo "Started process at "`date` > $LOGFILE
 counter=0
 echo word"|"count > $OUTFILE
 while read -r line; do
@@ -21,10 +25,12 @@ while read -r line; do
 		#sed -i -e "s/-*${line2}-*/-/g" $INFILE
 	fi
 	((counter++))
-	if (( counter % 1000 == 2 ))
+	if (( counter % 100 == 2 ))
 	then
 		gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.reduce
 		mv $INFILE.reduce $INFILE
+		echo $counter" words processed so far. The processing file is "`stat --printf="%s" $INFILE`" bytes. The time is "`date` >> $LOGFILE
+
 	fi
 
 	#if (( counter >= 15)); then
@@ -32,10 +38,6 @@ while read -r line; do
 	#fi
 done < $WORDFILE
 
+echo "Finished process at "`date` >> $LOGFILE
 
-#50M=55 seconds
-#100M=57 seconds 
-#10M 60 seconds
-#260M=56 seconds
-#500M=70 seconds
-#1M=123 seconds
+
