@@ -15,18 +15,18 @@ echo word"|"count > $OUTFILE
 while read -r line; do
 	line2=`echo $line | tr -d '\r'`
 
-	parallel -a $INFILE --will-cite --block 50M --pipe-part "sed -e 's/${line2}/\n/g'" >$INFILE.bak
+	parallel -a $INFILE --will-cite --block 25M --pipe-part "sed -e 's/${line2}/\n/g'" >$INFILE.bak
 	mv $INFILE.bak $INFILE		
 	aftersize=`du -b $INFILE | awk '{printf $1}'`
 	wordlen=`expr length "$line"`
-	WORDCOUNT=`echo "$(( ( $beforesize - $aftersize ) / ( 3 * $wordlen - 1 ) ))"`
+	WORDCOUNT=`echo "$(( ( $beforesize - $aftersize ) / ( $wordlen - 1 ) ))"`
 	#echo $line2"|"$WORDCOUNT"|"$beforesize"|"$aftersize"|"$wordlen >> $OUTFILE
 	echo $line2"|"$WORDCOUNT >> $OUTFILE
 	beforesize=$aftersize
 
 
 	((counter++))
-	if (( counter % 100 == 2 ))
+	if (( counter % 500 == 2 ))
 	then
 		gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.reduce
 		mv $INFILE.reduce $INFILE
@@ -34,9 +34,9 @@ while read -r line; do
 		beforesize=`du -b $INFILE | awk '{printf $1}'`	
 	fi
 
-	if (( counter >= 15)); then
-		break
-	fi
+	#if (( counter >= 15)); then
+	#	break
+	#fi
 done < $WORDFILE
 
 echo "|$beforesize|"`date`"|finished process" >> $LOGFILE
