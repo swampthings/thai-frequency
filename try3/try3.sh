@@ -27,7 +27,7 @@ while read -r line; do
 
 
 	((counter++))
-	if (( counter % 100 == 2 ))
+	if (( counter % 500 == 2 ))
 	then
 		gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.reduce
 		mv $INFILE.reduce $INFILE
@@ -35,9 +35,9 @@ while read -r line; do
 		beforesize=`du -b $INFILE | awk '{printf $1}'`	
 	fi
 
-	if (( counter >= 15)); then
-		break
-	fi
+	#if (( counter >= 15)); then
+	#	break
+	#fi
 done < $WORDFILE
 
 echo "|$beforesize|"`date`"|finished process" >> $LOGFILE
