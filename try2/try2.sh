@@ -27,7 +27,8 @@ while read -r line; do
 	((counter++))
 	if (( counter % 100 == 2 ))
 	then
-		gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.reduce
+		gawk 'BEGIN {ORS="\n"}{if (a!=$0) {print $0};a=$0;}' $INFILE >$INFILE.reduce #this just removes duplicate lines--need to fix
+		#gawk 'BEGIN {ORS="\n"}{if ($0!="") {print $0}}' $INFILE >$INFILE.reduce #this is the command that should have been used
 		mv $INFILE.reduce $INFILE
 		echo $counter" words processed so far. The processing file is "`stat --printf="%s" $INFILE`" bytes. The time is "`date` >> $LOGFILE
 
