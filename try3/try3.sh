@@ -20,6 +20,7 @@ while read -r line; do
 	aftersize=`du -b $INFILE | awk '{printf $1}'`
 	wordlen=`expr length "$line"`
 	WORDCOUNT=`echo "$(( ( $beforesize - $aftersize ) / ( 3 * $wordlen - 1 ) ))"`
+	#WORDCOUNT=`echo "$(( ( $beforesize - $aftersize ) / ( 1 * $wordlen - 1 ) ))"` #for ec2
 	#echo $line2"|"$WORDCOUNT"|"$beforesize"|"$aftersize"|"$wordlen >> $OUTFILE
 	echo $line2"|"$WORDCOUNT >> $OUTFILE
 	beforesize=$aftersize
