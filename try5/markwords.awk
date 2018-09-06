@@ -4,6 +4,9 @@
 #wordlist. if a match is found, then move the match to the outsentence, delimited by "-" ,
 #and reduce j by the amount of the removed word.
 
+#to fix
+#when in the last section, it only considers one character at a time...but it should max out
+
 BEGIN{
 	split("this these are the words in the example sentence sent is an it",array)
 	for (i in array){ #change to an easily searchable array
@@ -14,39 +17,38 @@ BEGIN{
 #		}
 	string = "this is an example sentence with some example words in it"
 	split(string,charsentence,"")
-	longest=8
+	
+	longest=15
 	outsentence=""
-	cutoff=length(charsentence)-longest+1
+	if (length(charsentence)<longest)
+		longest=length(charsentence)
 	for (i in charsentence) {
 		j=j charsentence[i]
 		jlen = length(j)
-		if (length(j)>=longest || i>cutoff) {
+		if ((jlen>=longest) || ((i+0)>(length(charsentence)-longest+1))) { #analyze section when it's long enough or if it's at the end of the sentence. +1000 is convert to number
+		#if ((jlen>=longest)) { #should use this one, but then need to rework the end
+			#print "pip", jlen, longest, i, (length(charsentence)-longest+1), (jlen>=longest) , (i>(length(charsentence)-longest+1))
 			flag = -99
 			k = 0
-			do {
-			#for (k = 0; k <= jlen; ++k) {
+			do { #loop through all characters of section until a matching word is found
 				tryphrase = substr(j,1,jlen - k)
 				if (tryphrase in wordlist) {
-					fishword =  tryphrase
-					outsentence = outsentence "-" fishword
+					outsentence = outsentence "-" tryphrase
+					j=substr(j,length(tryphrase)+1) #cut out the found phrase
+					print "***removed '" tryphrase "'"
 					flag = k
 					}
 				++k
 				} while (k <= jlen && flag == -99)
 			if (flag == -99) { #in the case there are no matching words, assume a 1-length word
 				outsentence = outsentence "-" substr(j,1,1)
-				if (jlen > 1) { 
+				print "***printed -'" substr(j,1,1) "'-"
+				if (jlen > 1) { #cut off the character pushed from j to outsentance
 					j=substr(j,2)
-					}
-				} else { #in the case there are matching words
-				fishwordlen=length(fishword)
-				if (fishwordlen >= jlen) { #remove the found word from j
-					j="" #needed because of how substr works
-					} else {
-					j=substr(j,fishwordlen+1)
 					}
 				} 
 			}
+			print i,"debug '" j "'" jlen
 		}
 	outsentence = outsentence "-"
 	print outsentence
