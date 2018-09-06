@@ -16,6 +16,7 @@ BEGIN{
 		if (length(array[i])>longest)
 			longest = length(array[i])
 		}
+	delete array
 #	for (i in wordlist) { 
 #		print i, wordlist[i]
 #		}
