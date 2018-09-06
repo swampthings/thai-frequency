@@ -18,15 +18,23 @@ BEGIN{
 	string = "this is an example sentence with some example words in it"
 	split(string,charsentence,"")
 	
-	longest=15
+	longest=7
 	outsentence=""
 	if (length(charsentence)<longest)
 		longest=length(charsentence)
-	for (i in charsentence) {
-		j=j charsentence[i]
+	finished = 0
+	fullyparsed = 0
+	i = 0
+#	for (i in charsentence) {
+	do {
+		i++
+		if ((i+0)<=length(charsentence))
+			j=j charsentence[i]
+		else
+			fullyparsed=1
 		jlen = length(j)
-		if ((jlen>=longest) || ((i+0)>(length(charsentence)-longest+1))) { #analyze section when it's long enough or if it's at the end of the sentence. +1000 is convert to number
-		#if ((jlen>=longest)) { #should use this one, but then need to rework the end
+		#if ((jlen>=longest) || ((i+0)>(length(charsentence)-longest+1))) { #analyze section when it's long enough or if it's at the end of the sentence. +1000 is convert to number
+		if (jlen >= longest || fullyparsed == 1) { #should use this one, but then need to rework the end
 			#print "pip", jlen, longest, i, (length(charsentence)-longest+1), (jlen>=longest) , (i>(length(charsentence)-longest+1))
 			flag = -99
 			k = 0
@@ -48,8 +56,13 @@ BEGIN{
 					}
 				} 
 			}
-			print i,"debug '" j "'" jlen
-		}
+			print i,"debug '" j "'" jlen, fullyparsed
+			if ((i+0)>length(charsentence) &&jlen <= 2)
+				finished = 1
+#			if ((i+0)>length(charsentence)+5 )
+#				finished = 1
+				
+		} while (finished == 0)
 	outsentence = outsentence "-"
 	print outsentence
 
