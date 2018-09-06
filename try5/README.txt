@@ -1,0 +1,1 @@
+This places a mark between all words, from the list. Then the list is easily parsable by a standard word frequency method.
