@@ -54,9 +54,11 @@ BEGIN{
 					}
 				} 
 			}
+		#print i,"debug '" j "'" jlen, fullyparsed
 		} while (!((i+0)>sentlen &&jlen <= 1))
 	outsentence = outsentence delimiter
 	print outsentence
+	print "longest: " longest
 
 }
 
