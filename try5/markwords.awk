@@ -8,24 +8,38 @@
 #when in the last section, it only considers one character at a time...but it should max out
 
 BEGIN{
-	delimiter="-"
-	longest=0
-	split("this these are the words in the example sentence sent is an it",array)
-	for (i in array){ #change to an easily searchable array
-		wordlist[array[i]]++;
-		if (length(array[i])>longest)
-			longest = length(array[i])
+	FS="ZZ"
+	#begin
+
+}
+
+{
+#	print FILENAME, ARGV[1], $1, $0
+
+	longest=15
+	if (FILENAME==ARGV[1]) {
+		wordlist[$0]++;
+		next
 		}
-	delete array
+	delimiter="-"
+	#split("this these are the words in the example sentence sent is an it",array)
+	#for (i in array){ #change to an easily searchable array
+	#	wordlist[array[i]]++;
+	#	if (length(array[i])>longest)
+	#		longest = length(array[i])
+	#	}
+	#delete array
 #	for (i in wordlist) { 
 #		print i, wordlist[i]
 #		}
-	string = "mumbothis is an example sentence with some example words in itjumbo sentence"
+#	string = "mumbothis is an example sentence with some example words in itjumbo sentence"
+	string = $0
 	split(string,charsentence,"")
 	
 	outsentence=""
 	fullyparsed = 0
 	i = 0
+	j = ""
 	sentlen=length(charsentence)
 	if (sentlen<longest)
 		longest=sentlen
@@ -59,5 +73,13 @@ BEGIN{
 	outsentence = outsentence delimiter
 	print outsentence
 
+
 }
 
+END {
+#	for (i in wordlist) { 
+#	print i, wordlist[i]
+#	}
+#	print "longest: " longest
+
+}
